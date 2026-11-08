@@ -15,7 +15,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { DEFAULT_GEMINI_3_MODEL, filterGemini3TextModels, GEMINI_3_FALLBACK_MODELS, GeminiService, isGemini3TextModel, type Message } from "@/lib/gemini";
+import { GeminiService, type Message } from "@/lib/gemini";
 import {
   AI_SYNC_ENABLED_STORAGE_KEY,
   getSizeMB,
@@ -116,12 +116,6 @@ export default function AiAssistant() {
   const [isRecording, setIsRecording] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [retryMessage, setRetryMessage] = useState<{ text: string; image?: string } | null>(null);
-  const [availableModels, setAvailableModels] = useState<string[]>(GEMINI_3_FALLBACK_MODELS as unknown as string[]);
-  const [selectedModel, setSelectedModel] = useState(() => {
-    if (typeof window === "undefined") return DEFAULT_GEMINI_3_MODEL;
-    const savedModel = localStorage.getItem("brewcraft-ai-model")?.trim();
-    return isGemini3TextModel(savedModel) ? savedModel! : DEFAULT_GEMINI_3_MODEL;
-  });
   const scrollRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -146,50 +140,8 @@ export default function AiAssistant() {
   }, [messages, isLoading]);
 
   useEffect(() => {
-    localStorage.setItem("brewcraft-ai-model", selectedModel);
-  }, [selectedModel]);
-
-  useEffect(() => {
     localStorage.setItem(AI_SYNC_ENABLED_STORAGE_KEY, String(cloudSyncEnabled));
   }, [cloudSyncEnabled]);
-
-  useEffect(() => {
-    if (!apiKey || typeof window === "undefined") {
-      setAvailableModels([]);
-      setSelectedModel((prev) => isGemini3TextModel(prev) ? prev : DEFAULT_GEMINI_3_MODEL);
-      return;
-    }
-
-    const fetchAvailableModels = async () => {
-      try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(apiKey)}`);
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
-        }
-
-        const payload = await response.json();
-        const models = Array.isArray(payload.models)
-          ? filterGemini3TextModels(payload.models as Array<Record<string, unknown>>)
-          : [];
-
-        console.log("Modelos Gemini 3 disponíveis para esta API Key:", payload);
-
-        setAvailableModels(models.length > 0 ? models : GEMINI_3_FALLBACK_MODELS as unknown as string[]);
-
-        setSelectedModel((prev) => {
-          const validCurrent = isGemini3TextModel(prev) && models.includes(prev) ? prev : (models[0] ?? DEFAULT_GEMINI_3_MODEL);
-          localStorage.setItem("brewcraft-ai-model", validCurrent);
-          return validCurrent;
-        });
-      } catch (error) {
-        console.error("Erro ao listar modelos Gemini:", error);
-        setAvailableModels(GEMINI_3_FALLBACK_MODELS as unknown as string[]);
-        setSelectedModel((prev) => (isGemini3TextModel(prev) ? prev : DEFAULT_GEMINI_3_MODEL));
-      }
-    };
-
-    void fetchAvailableModels();
-  }, [apiKey]);
 
   useEffect(() => {
     const savedChats = readStoredAiChats();
@@ -379,7 +331,7 @@ export default function AiAssistant() {
     setIsLoading(true);
 
     try {
-      const gemini = new GeminiService(apiKey, selectedModel);
+      const gemini = new GeminiService(apiKey);
 
       const context = {
         recipeCount: recipes.length,
@@ -746,26 +698,6 @@ export default function AiAssistant() {
         <div className="flex w-full flex-row flex-wrap items-center gap-2 md:w-auto">
           <img src={geminiLogo} alt="Assistente IA" className="w-16 h-16 object-contain" />
           <h1 className="text-2xl font-bold">Assistente IA</h1>
-          <label className="flex items-center gap-2 rounded-md border border-slate-600/70 bg-[#111827]/85 px-2.5 py-1.5 text-xs text-slate-200 shadow-sm backdrop-blur-sm">
-            <span className="font-medium text-slate-300">Modelo</span>
-            <select
-              value={selectedModel}
-              onChange={(e) => {
-                const nextModel = e.target.value.trim();
-                if (isGemini3TextModel(nextModel)) {
-                  setSelectedModel(nextModel);
-                }
-              }}
-              className="min-w-[220px] rounded-md border border-slate-600/80 bg-[#0f172a] px-2 py-1.5 text-xs text-slate-100 outline-none ring-0 transition focus:border-primary focus:ring-2 focus:ring-primary/30"
-              aria-label="Selecionar modelo de IA"
-            >
-              {(availableModels.length > 0 ? availableModels : [DEFAULT_GEMINI_3_MODEL]).map((model) => (
-                <option key={model} value={model} className="bg-[#0f172a] text-slate-100">
-                  {model}
-                </option>
-              ))}
-            </select>
-          </label>
         </div>
         <div className="flex w-full flex-row flex-wrap gap-2 md:w-auto">
           <Button variant="outline" size="sm" onClick={() => setIsHistoryOpen((prev) => !prev)}>
