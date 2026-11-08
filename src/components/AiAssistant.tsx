@@ -25,7 +25,7 @@ import {
   type ChatSession,
 } from "@/lib/cloud-sync";
 import { useInventory, useRecipes, uid } from "@/lib/store";
-import { type Recipe, defaultEquipment, recipeStats, type InventoryItem } from "@/lib/recipe-calc";
+import { type Recipe, defaultEquipment, recipeStats, type InventoryItem, type HopUse } from "@/lib/recipe-calc";
 import { saveSettings } from "@/lib/settings";
 import geminiLogo from "../../gemini-svg.svg";
 
@@ -390,7 +390,7 @@ export default function AiAssistant() {
       let streamedText = "";
 
       for await (const chunk of streamResult.stream) {
-        const chunkText = await chunk.text();
+        const chunkText = chunk.text;
         if (!chunkText) continue;
 
         streamedText += chunkText;
@@ -510,7 +510,7 @@ export default function AiAssistant() {
     setIsHistoryOpen(false);
   };
 
-  const normalizeAiRecipe = (recipeLike: Partial<Recipe> & Record<string, unknown> | undefined) => {
+  const normalizeAiRecipe = (recipeLike: Record<string, unknown> | undefined) => {
     const payload = recipeLike ?? {};
     const equipmentSource = (payload.equipment ?? {}) as Record<string, unknown>;
     const defaultFermentable = { id: uid(), name: "Pale Ale", kg: 4, potential: 1.037, color: 3, type: "grao", price: 0 };
@@ -525,7 +525,7 @@ export default function AiAssistant() {
       efficiency: Number(equipmentSource.efficiency ?? payload.efficiency ?? defaultEquipment.efficiency) || defaultEquipment.efficiency,
     };
 
-    const normalizeUse = (value: unknown) => {
+    const normalizeUse = (value: unknown): HopUse => {
       const raw = String(value ?? "fervura").trim().toLowerCase();
       if (raw.includes("dry") || raw.includes("dryhop") || raw.includes("dry-hop")) return "dryhop";
       if (raw.includes("whirl") || raw.includes("whirlpool")) return "whirlpool";

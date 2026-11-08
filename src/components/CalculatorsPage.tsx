@@ -88,7 +88,7 @@ export default function CalculatorsPage() {
       </aside>
       <section aria-label={calculator.title} className="min-w-0 bg-card border border-border rounded-lg p-5 sm:p-6 shadow-foam">
         <div className="border-b border-border pb-4"><p className="text-xs text-muted-foreground mb-1">{calculator.group}</p><h2 className="text-xl font-semibold text-foreground break-words">{calculator.title}</h2></div>
-        {calculator.converter ? <UnitConverter key={calculator.id} fixed={calculator.converter} /> : <CalculationForm key={calculator.id} calculator={calculator} />}
+        {calculator.converter ? <UnitConverter key={calculator.id} fixed={calculator.converter} locale={locale} /> : <CalculationForm key={calculator.id} calculator={calculator} locale={locale} />}
       </section>
     </div>
   </div>;
