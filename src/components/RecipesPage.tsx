@@ -39,16 +39,20 @@ export default function RecipesPage() {
             <Card key={r.id} className="shadow-card hover:shadow-brew transition-shadow cursor-pointer" onClick={() => navigate(`/recipes/${r.id}`)}>
               <CardHeader className="pb-2">
                 <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-3">
-                    <CanecaLimpa color={srmToHex(s.srm)} className="w-24 h-auto flex-shrink-0" />
-                    <div><CardTitle className="text-lg">{r.name}</CardTitle><p className="text-sm text-muted-foreground">{style?.name ?? "Sem estilo"}</p></div>
-                  </div>
-                  <div className="flex" onClick={e => e.stopPropagation()}>
+                  <div className="min-w-0"><CardTitle className="text-lg break-words">{r.name}</CardTitle><p className="text-sm text-muted-foreground">{style?.name ?? "Sem estilo"}</p></div>
+                  <div className="flex shrink-0" onClick={e => e.stopPropagation()}>
                     <Button variant="ghost" size="icon" aria-label={r.favorite ? "Remover dos favoritos" : "Adicionar aos favoritos"} onClick={() => toggleFavorite(r.id)}><Star className={`h-4 w-4 ${r.favorite ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"}`} /></Button>
                     <Button variant="ghost" size="icon" aria-label="Duplicar" onClick={() => duplicate(r.id)}><Copy className="h-4 w-4" /></Button>
                     <Button variant="ghost" size="icon" aria-label="Excluir" onClick={() => remove(r.id)}><Trash2 className="h-4 w-4" /></Button>
                   </div>
                 </div>
+                <CanecaLimpa
+                  color={srmToHex(s.srm)}
+                  metrics={{ og: fmt(s.og, 3), fg: fmt(s.fg, 3), abv: `${fmt(s.abv)}%`, ibu: fmt(s.ibu, 0) }}
+                  className="mx-auto w-56 max-w-full h-auto"
+                  role="img"
+                  aria-label={`OG ${fmt(s.og, 3)}, FG ${fmt(s.fg, 3)}, ABV ${fmt(s.abv)}%, IBU ${fmt(s.ibu, 0)}`}
+                />
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-4 gap-2 text-center text-sm">
