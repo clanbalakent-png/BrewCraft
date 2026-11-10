@@ -2,7 +2,7 @@ import type { SVGProps } from "react";
 
 interface CanecaLimpaProps extends SVGProps<SVGSVGElement> {
   color: string;
-  metrics?: { og: string; fg: string; abv: string; ibu: string };
+  metrics?: { og: string; fg: string; abv: string; ibu: string; srm: string };
 }
 
 export default function CanecaLimpa({ color, metrics, className, ...props }: CanecaLimpaProps) {
@@ -1231,6 +1231,8 @@ z"></path>
     <text x="700" y="1630" fontSize="125" textLength={metrics.abv.length > 5 ? 300 : undefined} lengthAdjust="spacingAndGlyphs">{metrics.abv}</text>
     <text x="1060" y="1460" fontSize="100">IBU</text>
     <text x="1060" y="1630" fontSize="125" textLength={metrics.ibu.length > 3 ? 300 : undefined} lengthAdjust="spacingAndGlyphs">{metrics.ibu}</text>
+    <text x="882" y="1870" fontSize="100">SRM</text>
+    <text x="882" y="2010" fontSize="125" textLength={metrics.srm.length > 5 ? 600 : undefined} lengthAdjust="spacingAndGlyphs">{metrics.srm}</text>
   </g>
 )}
 </svg>

@@ -48,20 +48,14 @@ export default function RecipesPage() {
                 </div>
                 <CanecaLimpa
                   color={srmToHex(s.srm)}
-                  metrics={{ og: fmt(s.og, 3), fg: fmt(s.fg, 3), abv: `${fmt(s.abv)}%`, ibu: fmt(s.ibu, 0) }}
+                  metrics={{ og: fmt(s.og, 3), fg: fmt(s.fg, 3), abv: `${fmt(s.abv)}%`, ibu: fmt(s.ibu, 0), srm: fmt(s.srm) }}
                   className="mx-auto w-56 max-w-full h-auto"
                   role="img"
-                  aria-label={`OG ${fmt(s.og, 3)}, FG ${fmt(s.fg, 3)}, ABV ${fmt(s.abv)}%, IBU ${fmt(s.ibu, 0)}`}
+                  aria-label={`OG ${fmt(s.og, 3)}, FG ${fmt(s.fg, 3)}, ABV ${fmt(s.abv)}%, IBU ${fmt(s.ibu, 0)}, SRM ${fmt(s.srm)}`}
                 />
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-4 gap-2 text-center text-sm">
-                  <div><div className="font-bold">{fmt(s.og, 3)}</div><div className="text-xs text-muted-foreground">OG</div></div>
-                  <div><div className="font-bold">{fmt(s.abv)}%</div><div className="text-xs text-muted-foreground">ABV</div></div>
-                  <div><div className="font-bold">{fmt(s.ibu, 0)}</div><div className="text-xs text-muted-foreground">IBU</div></div>
-                  <div><div className="font-bold">{fmt(s.srm)}</div><div className="text-xs text-muted-foreground">SRM</div></div>
-                </div>
-                <div className="mt-3 flex justify-between text-xs text-muted-foreground"><span>{fmt(r.equipment.batchL)} L</span><Badge variant="secondary">{money(s.cost.total)}</Badge></div>
+                <div className="flex justify-between text-xs text-muted-foreground"><span>{fmt(r.equipment.batchL)} L</span><Badge variant="secondary">{money(s.cost.total)}</Badge></div>
               </CardContent>
             </Card>
           );
