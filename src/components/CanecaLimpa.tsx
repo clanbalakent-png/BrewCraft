@@ -1,4 +1,5 @@
 import type { SVGProps } from "react";
+import "@/assets/fonts/mug-fonts.css";
 
 interface CanecaLimpaProps extends SVGProps<SVGSVGElement> {
   color: string;
@@ -1225,14 +1226,14 @@ M1450.371460,1692.259277
 z"></path>
 {metrics && (
   <g className="mug-metrics" textAnchor="middle" fontWeight="700" letterSpacing="0" pointerEvents="none">
-    <text x="882" y="1010" fontSize="100">OG / FG</text>
-    <text x="882" y="1200" fontSize="115" textLength="680" lengthAdjust="spacingAndGlyphs">{metrics.og} / {metrics.fg}</text>
-    <text x="700" y="1460" fontSize="100">ABV</text>
-    <text x="700" y="1630" fontSize="125" textLength={metrics.abv.length > 5 ? 300 : undefined} lengthAdjust="spacingAndGlyphs">{metrics.abv}</text>
-    <text x="1060" y="1460" fontSize="100">IBU</text>
-    <text x="1060" y="1630" fontSize="125" textLength={metrics.ibu.length > 3 ? 300 : undefined} lengthAdjust="spacingAndGlyphs">{metrics.ibu}</text>
-    <text x="882" y="1870" fontSize="100">SRM</text>
-    <text x="882" y="2010" fontSize="125" textLength={metrics.srm.length > 5 ? 600 : undefined} lengthAdjust="spacingAndGlyphs">{metrics.srm}</text>
+    <text className="mug-heading" x="882" y="1005" fontSize="170">OG / FG</text>
+    <text className="mug-tall" x="882" y="1220" fontSize="195" textLength="680" lengthAdjust="spacingAndGlyphs">{metrics.og} / {metrics.fg}</text>
+    <text className="mug-heading" x="700" y="1445" fontSize="110">ABV</text>
+    <text className="mug-heading" x="700" y="1645" fontSize="180" textLength={metrics.abv.length > 3 ? 300 : undefined} lengthAdjust="spacingAndGlyphs">{metrics.abv}</text>
+    <text className="mug-tall mug-gold" x="1060" y="1445" fontSize="110">IBU</text>
+    <text className="mug-tall mug-gold" x="1060" y="1645" fontSize="190" textLength={metrics.ibu.length > 3 ? 300 : undefined} lengthAdjust="spacingAndGlyphs">{metrics.ibu}</text>
+    <text className="mug-tall" x="882" y="1855" fontSize="100">SRM</text>
+    <text className="mug-tall" x="882" y="2005" fontSize="150" textLength={metrics.srm.length > 5 ? 600 : undefined} lengthAdjust="spacingAndGlyphs">{metrics.srm}</text>
   </g>
 )}
 </svg>
