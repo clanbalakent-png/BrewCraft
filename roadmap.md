@@ -1,4 +1,5 @@
 # Funções do Brewfather
+- [x] Adicionar visualizações Lista, Grande (80%) e Médio (60%) nas receitas e verificar
 - [x] Editor de receitas com ingredientes e cálculos automáticos
 - [x] Perfis aplicados na receita
 - [x] Lotes ligados a receitas com etapas
