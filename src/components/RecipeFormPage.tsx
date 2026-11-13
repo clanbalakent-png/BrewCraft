@@ -200,7 +200,9 @@ export default function RecipeFormPage() {
         </CardHeader>
         <CardContent className="space-y-3">
           {r.hops.length === 0 && <p className="text-sm text-muted-foreground">Nenhum lúpulo.</p>}
-          {r.hops.map((h, i) => (
+          {r.hops.map((h, i) => {
+            const cat = catHops.find(c => c.name === h.name);
+            return (
             <div key={h.id} className="grid grid-cols-2 sm:grid-cols-[2fr_1fr_1fr_1.2fr_1fr_1fr_auto] gap-2 items-end border-b border-border pb-3">
               <div className="col-span-2 sm:col-span-1"><Label className="text-xs text-muted-foreground">Nome</Label><Input value={h.name} onChange={e => updateList("hops", i, { name: e.target.value })} /></div>
               <NumField label="g" value={h.grams} step="1" onChange={v => updateList("hops", i, { grams: v })} />
@@ -213,8 +215,14 @@ export default function RecipeFormPage() {
                 : <NumField label="Minutos" value={h.minutes} step="1" onChange={v => updateList("hops", i, { minutes: v })} />}
               <NumField label="R$/kg" value={h.price} onChange={v => updateList("hops", i, { price: v })} />
               <Button variant="ghost" size="icon" aria-label="Remover" onClick={() => removeFrom("hops", i)}><Trash2 className="h-4 w-4" /></Button>
+              {cat && (
+                <div className="col-span-2 sm:col-span-full text-xs text-muted-foreground">
+                  <b className="text-foreground">Substitutos:</b> {cat.substitutes.join(", ")} · <b className="text-foreground">Perfil:</b> {cat.profile}
+                </div>
+              )}
             </div>
-          ))}
+            );
+          })}
         </CardContent>
       </Card>
 

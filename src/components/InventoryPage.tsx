@@ -69,6 +69,14 @@ export default function InventoryPage() {
             <div className="space-y-1"><Label>Quantidade ({form.unit})</Label><Input type="number" step="0.01" value={form.amount} onChange={e => setForm({ ...form, amount: num(e.target.value) })} /></div>
             <div className="space-y-1"><Label>Mínimo ({form.unit})</Label><Input type="number" step="0.01" value={form.minAmount} onChange={e => setForm({ ...form, minAmount: num(e.target.value) })} /></div>
             <div className="space-y-1"><Label>{def.priceLabel}</Label><Input type="number" step="0.01" value={form.price} onChange={e => setForm({ ...form, price: num(e.target.value) })} /></div>
+            {form.kind === "lupulo" && (() => { const h = hops.find(x => x.name === form.name); return h ? (
+              <div className="sm:col-span-5 rounded-md border border-border bg-muted/40 p-3 space-y-1 text-xs text-muted-foreground">
+                <div><b className="text-foreground">Uso:</b> {h.usage} · {h.origin} · {h.alpha}% AA</div>
+                <div><b className="text-foreground">Perfil:</b> {h.profile}</div>
+                <div><b className="text-foreground">Substitutos:</b> {h.substitutes.join(", ")}</div>
+                <div><b className="text-foreground">História:</b> {h.history}</div>
+              </div>
+            ) : null; })()}
             <Button onClick={submit} className="sm:col-span-2">Salvar</Button>
           </CardContent>
         </Card>
