@@ -18,17 +18,18 @@ const kinds: { id: InventoryKind; label: string; unit: string; priceLabel: strin
   { id: "outro", label: "Outros", unit: "un", priceLabel: "R$/un" },
 ];
 const catalogFor = (k: InventoryKind) =>
-  k === "fermentavel" ? fermentables.map(f => ({ name: f.name, price: f.price, extra: { potential: f.potential, color: f.color } }))
+  (k === "fermentavel" ? fermentables.map(f => ({ name: f.name, price: f.price, extra: { potential: f.potential, color: f.color } }))
   : k === "lupulo" ? hops.map(h => ({ name: h.name, price: h.price / 1000, extra: { alpha: h.alpha } }))
   : k === "levedura" ? yeasts.map(y => ({ name: y.name, price: y.price, extra: { attenuation: y.attenuation } }))
-  : miscs.map(m => ({ name: m.name, price: m.price, extra: {} }));
+  : miscs.map(m => ({ name: m.name, price: m.price, extra: {} })))
+  .sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
 
 export default function InventoryPage() {
   const [items, save] = useInventory();
   const [kind, setKind] = useState<InventoryKind>("fermentavel");
   const [form, setForm] = useState<InventoryItem | null>(null);
   const def = kinds.find(k => k.id === kind)!;
-  const list = items.filter(i => i.kind === kind).sort((a, b) => a.name.localeCompare(b.name));
+  const list = items.filter(i => i.kind === kind).sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
   const low = items.filter(i => i.amount <= i.minAmount);
   const total = items.reduce((s, i) => s + i.amount * i.price, 0);
   const blank = (): InventoryItem => ({ id: uid(), kind, name: "", amount: 0, unit: def.unit, price: 0, minAmount: 0 });
@@ -75,19 +76,30 @@ export default function InventoryPage() {
 
       {list.length === 0 && <p className="text-muted-foreground">Nenhum item nesta categoria.</p>}
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-        {list.map(i => (
+        {list.map(i => {
+          const hopInfo = i.kind === "lupulo" ? hops.find(h => h.name === i.name) : undefined;
+          return (
           <Card key={i.id} className="shadow-card"><CardContent className="p-4 flex items-start justify-between gap-2">
             <div>
               <div className="font-semibold">{i.name}</div>
               <div className="text-sm text-muted-foreground">{fmt(i.amount, 2)} {i.unit} · {money(i.amount * i.price)}{i.alpha ? ` · ${i.alpha}% AA` : ""}{i.color !== undefined ? ` · ${i.color}°L` : ""}</div>
               {i.amount <= i.minAmount && <Badge variant="destructive" className="mt-1">Estoque baixo</Badge>}
+              {hopInfo && (
+                <div className="mt-2 space-y-1 text-xs text-muted-foreground">
+                  <div><b className="text-foreground">Uso:</b> {hopInfo.usage} · {hopInfo.origin}</div>
+                  <div><b className="text-foreground">Perfil:</b> {hopInfo.profile}</div>
+                  <div><b className="text-foreground">Substitutos:</b> {hopInfo.substitutes.join(", ")}</div>
+                  <div><b className="text-foreground">História:</b> {hopInfo.history}</div>
+                </div>
+              )}
             </div>
             <div className="flex">
               <Button variant="ghost" size="icon" aria-label="Editar" onClick={() => setForm(i)}><Pencil className="h-4 w-4" /></Button>
               <Button variant="ghost" size="icon" aria-label="Excluir" onClick={() => save(items.filter(x => x.id !== i.id))}><Trash2 className="h-4 w-4" /></Button>
             </div>
           </CardContent></Card>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 /** Built-in ingredient catalog and BJCP 2021 style guidelines (subset). */
 export type FermentableType = "grao" | "extrato" | "acucar" | "adjunto";
 export interface CatalogFermentable { name: string; type: FermentableType; potential: number; color: number; price: number }
-export interface CatalogHop { name: string; alpha: number; origin: string; price: number }
+export interface CatalogHop { name: string; alpha: number; origin: string; price: number; usage: string; profile: string; history: string; substitutes: string[] }
 export interface CatalogYeast { name: string; lab: string; attenuation: number; tempMin: number; tempMax: number; price: number }
 export interface CatalogMisc { name: string; use: string; price: number }
 
@@ -36,30 +36,35 @@ export const fermentables: CatalogFermentable[] = [
   { name: "Milho em Flocos", type: "adjunto", potential: 1.037, color: 1, price: 14 },
 ];
 
-// price in R$/kg
+// price in R$/kg; usage = indicação de uso; profile = perfil sensorial; substitutes = variedades substitutas
 export const hops: CatalogHop[] = [
-  { name: "Cascade", alpha: 6, origin: "EUA", price: 250 },
-  { name: "Centennial", alpha: 10, origin: "EUA", price: 280 },
-  { name: "Chinook", alpha: 13, origin: "EUA", price: 280 },
-  { name: "Citra", alpha: 12.5, origin: "EUA", price: 450 },
-  { name: "Mosaic", alpha: 12, origin: "EUA", price: 450 },
-  { name: "Simcoe", alpha: 13, origin: "EUA", price: 420 },
-  { name: "Amarillo", alpha: 9, origin: "EUA", price: 380 },
-  { name: "Columbus (CTZ)", alpha: 15, origin: "EUA", price: 260 },
-  { name: "Magnum", alpha: 13, origin: "Alemanha", price: 220 },
-  { name: "Hallertau Mittelfrüh", alpha: 4, origin: "Alemanha", price: 300 },
-  { name: "Hallertau Blanc", alpha: 9, origin: "Alemanha", price: 380 },
-  { name: "Tettnang", alpha: 4.5, origin: "Alemanha", price: 300 },
-  { name: "Perle", alpha: 8, origin: "Alemanha", price: 260 },
-  { name: "Saaz", alpha: 3.5, origin: "Rep. Tcheca", price: 300 },
-  { name: "East Kent Goldings", alpha: 5, origin: "Reino Unido", price: 320 },
-  { name: "Fuggle", alpha: 4.5, origin: "Reino Unido", price: 300 },
-  { name: "Galaxy", alpha: 14, origin: "Austrália", price: 520 },
-  { name: "Nelson Sauvin", alpha: 12, origin: "Nova Zelândia", price: 550 },
-  { name: "Motueka", alpha: 7, origin: "Nova Zelândia", price: 480 },
-  { name: "Sabro", alpha: 14, origin: "EUA", price: 480 },
-  { name: "El Dorado", alpha: 15, origin: "EUA", price: 420 },
-  { name: "Mandarina Bavaria", alpha: 8.5, origin: "Alemanha", price: 360 },
+  { name: "Cascade", alpha: 6, origin: "EUA", price: 250, usage: "Duplo Propósito", profile: "Floral, cítrico, toranja (grapefruit)", history: "Lançado em 1972 pelo programa do USDA, revolucionou a cerveja artesanal americana. É a assinatura histórica da icônica Sierra Nevada Pale Ale.", substitutes: ["Centennial", "Amarillo"] },
+  { name: "Centennial", alpha: 10, origin: "EUA", price: 280, usage: "Duplo Propósito", profile: "Cítrico, floral, levemente resinoso", history: "Criado em 1974 e lançado em 1990. Ganhou o apelido de 'Super Cascade' por ter um perfil cítrico muito semelhante, mas com quase o dobro de alfa ácido.", substitutes: ["Cascade", "Chinook"] },
+  { name: "Chinook", alpha: 13, origin: "EUA", price: 280, usage: "Duplo Propósito", profile: "Pinho, especiarias, toranja", history: "Lançado em 1985 pelo USDA em Washington, originou-se do cruzamento do lúpulo inglês Petham Golding com uma variedade silvestre americana.", substitutes: ["Columbus (CTZ)", "Northern Brewer"] },
+  { name: "Citra", alpha: 12.5, origin: "EUA", price: 450, usage: "Aroma", profile: "Frutas tropicais, manga, maracujá, cítrico", history: "Lançado em 2008 pela Hop Breeding Company. Seu cruzamento complexo (incluindo Hallertau e East Kent) impulsionou a febre mundial das NEIPAs.", substitutes: ["Mosaic", "Galaxy"] },
+  { name: "Mosaic", alpha: 12, origin: "EUA", price: 450, usage: "Aroma", profile: "Mirtilo, manga, frutas tropicais, terroso", history: "Lançado em 2012 como HBC 369. É geneticamente 'filho' do Simcoe e ganhou esse nome pela vasta complexidade de aromas (um mosaico) que entrega.", substitutes: ["Citra", "Simcoe"] },
+  { name: "Simcoe", alpha: 13, origin: "EUA", price: 420, usage: "Duplo Propósito", profile: "Maracujá, pinho, terroso, cítrico", history: "Lançado em 2000 pela Yakima Chief Ranches. Tornou-se rapidamente o pilar fundamental de amargor e aroma das West Coast IPAs modernas.", substitutes: ["Mosaic", "Chinook"] },
+  { name: "Amarillo", alpha: 9, origin: "EUA", price: 380, usage: "Aroma", profile: "Laranja, tangerina, floral, doce", history: "Descoberto por acaso crescendo na Virgil Gamache Farms nos anos 1990, foi patenteado e lançado em 2003 com exclusividade rigorosa de cultivo.", substitutes: ["Cascade", "Centennial"] },
+  { name: "Columbus (CTZ)", alpha: 15, origin: "EUA", price: 260, usage: "Duplo Propósito", profile: "Picante, terroso, pungente, pinho", history: "Parte do trio CTZ (Columbus, Tomahawk, Zeus). Surgiu nos anos 1980 e é amplamente utilizado por cervejeiros para extração rápida de amargor intenso e dry hopping.", substitutes: ["Chinook", "Magnum"] },
+  { name: "Magnum", alpha: 13, origin: "Alemanha", price: 220, usage: "Amargor", profile: "Limpo, amargor suave, levemente cítrico", history: "Cultivado em Hüll, Alemanha, desde 1980. Descende do lúpulo americano Galena e é muito apreciado por entregar um amargor extremamente limpo e neutro.", substitutes: ["Columbus (CTZ)", "Northern Brewer"] },
+  { name: "Hallertau Mittelfrüh", alpha: 4, origin: "Alemanha", price: 300, usage: "Aroma", profile: "Floral, picante, nobre, levemente terroso", history: "A variedade nobre original e clássica da Baviera. Quase foi extinta por infecções de fungos nos anos 1970, mas sobreviveu pela demanda insubstituível em Lagers.", substitutes: ["Tettnang", "Saaz"] },
+  { name: "Hallertau Blanc", alpha: 9, origin: "Alemanha", price: 380, usage: "Aroma", profile: "Uva branca, vinho, capim-limão, maracujá", history: "Lançado na Alemanha em 2012 para competir com os lúpulos frutados do Novo Mundo. Seu perfil lembra notavelmente o vinho Sauvignon Blanc.", substitutes: ["Nelson Sauvin", "Motueka"] },
+  { name: "Tettnang", alpha: 4.5, origin: "Alemanha", price: 300, usage: "Aroma", profile: "Herbal, picante, floral suave", history: "Um lúpulo nobre com séculos de tradição, cultivado quase exclusivamente na região de Tettnang e essencial para as tradicionais cervejas de trigo alemãs (Weissbier).", substitutes: ["Saaz", "Hallertau Mittelfrüh"] },
+  { name: "Perle", alpha: 8, origin: "Alemanha", price: 260, usage: "Duplo Propósito", profile: "Picante, floral, menta leve", history: "Criado no instituto alemão Hüll em 1978 a partir do inglês Northern Brewer, focado em combinar boa resistência a pragas agrícolas com um perfil de aroma clássico.", substitutes: ["Northern Brewer", "Tettnang"] },
+  { name: "Saaz", alpha: 3.5, origin: "Rep. Tcheca", price: 300, usage: "Aroma", profile: "Terroso, picante, herbal intenso (clássico Pilsner)", history: "O lúpulo clássico da Boêmia com mais de 700 anos de história. É a alma da Pilsner Urquell, definindo o estilo Bohemian Pilsner desde 1842.", substitutes: ["Tettnang", "Hallertau Mittelfrüh"] },
+  { name: "East Kent Goldings", alpha: 5, origin: "Reino Unido", price: 320, usage: "Aroma", profile: "Terroso, mel, floral, especiarias suaves", history: "Desenvolvido na Inglaterra por volta de 1790. É o lúpulo essencial e histórico por trás das autênticas IPAs inglesas e Bitter Ales.", substitutes: ["Fuggle", "Willamette"] },
+  { name: "Fuggle", alpha: 4.5, origin: "Reino Unido", price: 300, usage: "Aroma", profile: "Terroso, amadeirado, levemente frutado", history: "Descoberto casualmente em Kent, na Inglaterra, em 1868 por Richard Fuggle. Foi a variedade mais cultivada no Reino Unido durante o século XIX.", substitutes: ["Willamette", "East Kent Goldings"] },
+  { name: "Galaxy", alpha: 14, origin: "Austrália", price: 520, usage: "Aroma", profile: "Maracujá, pêssego, frutas cítricas intensas", history: "Lançado em 2009 na Austrália (descendente do Perle alemão). Foi o principal responsável por colocar os lúpulos australianos no mapa mundial da cerveja.", substitutes: ["Citra", "Nelson Sauvin"] },
+  { name: "Nelson Sauvin", alpha: 12, origin: "Nova Zelândia", price: 550, usage: "Aroma", profile: "Vinho branco, groselha, uva, maracujá", history: "Lançado no ano 2000, foi batizado em homenagem à uva Sauvignon Blanc devido à incrível semelhança de aroma proveniente do seu terroir neozelandês.", substitutes: ["Hallertau Blanc", "Motueka"] },
+  { name: "Motueka", alpha: 7, origin: "Nova Zelândia", price: 480, usage: "Aroma", profile: "Limão fresco, lima, frutas tropicais", history: "Anteriormente chamado de 'B Saaz', foi desenvolvido combinando a herança nobre do Saaz tcheco (1/3 do genoma) com a fertilidade do solo da Nova Zelândia.", substitutes: ["Saaz", "Hallertau Blanc"] },
+  { name: "Sabro", alpha: 14, origin: "EUA", price: 480, usage: "Aroma", profile: "Coco, tangerina, frutas tropicais, cedro", history: "Lançado em 2018 como HBC 438, é diretamente derivado do Neomexicanus, uma subespécie de lúpulo selvagem que cresce nativamente nas montanhas do Novo México.", substitutes: ["Mosaic", "Citra"] },
+  { name: "El Dorado", alpha: 15, origin: "EUA", price: 420, usage: "Aroma", profile: "Pera, melancia, frutas de caroço, doce", history: "Lançado em 2010 pela CLS Farms no Yakima Valley. Destacou-se rapidamente por apresentar um perfil mais doce, lembrando balas de frutas e melancia.", substitutes: ["Citra", "Galaxy"] },
+  { name: "Mandarina Bavaria", alpha: 8.5, origin: "Alemanha", price: 360, usage: "Aroma", profile: "Tangerina, cítrico leve, levemente doce", history: "Criado na Alemanha e lançado em 2012. Possui o Cascade americano em sua linhagem genética, tendo sido criado especificamente para entregar notas modernas e cítricas.", substitutes: ["Cascade", "Amarillo"] },
+  { name: "Strata", alpha: 14, origin: "EUA", price: 500, usage: "Aroma", profile: "Maracujá, morango, resinoso (dank)", history: "Lançado em 2018 pela Oregon State University com a Indie Hops, ganhou popularidade instantânea pelas notas intensas de frutas frescas contrastando com cannabis (dank).", substitutes: ["Citra", "Mosaic"] },
+  { name: "Idaho 7", alpha: 14, origin: "EUA", price: 420, usage: "Duplo Propósito", profile: "Pêssego, chá preto, pinho, cítrico", history: "Lançado em 2015 em Idaho (EUA). É extremamente utilizado para dry-hopping pesado em IPAs por entregar notas exóticas de chá preto e pinho resinoso.", substitutes: ["Simcoe", "Mosaic"] },
+  { name: "Sorachi Ace", alpha: 11, origin: "Japão", price: 400, usage: "Duplo Propósito", profile: "Limão siciliano, endro (dill), capim-limão", history: "Desenvolvido em 1984 pelas Cervejarias Sapporo no Japão. Foi quase esquecido por décadas até ser resgatado e cultivado comercialmente nos EUA no fim dos anos 2000.", substitutes: ["Motueka", "Nelson Sauvin"] },
+  { name: "Northern Brewer", alpha: 9, origin: "Reino Unido / Alemanha", price: 250, usage: "Duplo Propósito", profile: "Amadeirado, terroso, rústico, menta", history: "Criado na Inglaterra em 1934, é hoje plantado no mundo todo e é considerado sinônimo do estilo histórico California Common (Steam Beer), popularizado pela Anchor Brewing.", substitutes: ["Perle", "Magnum"] },
+  { name: "Willamette", alpha: 5, origin: "EUA", price: 280, usage: "Aroma", profile: "Floral, terroso, especiarias suaves", history: "Lançado em 1976 como um substituto cultivado na América para o inglês Fuggle. Tornou-se o pilar histórico para as autênticas Porters e Stouts artesanais americanas.", substitutes: ["Fuggle", "East Kent Goldings"] },
 ];
 
 // price in R$ per pack
